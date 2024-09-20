@@ -1,0 +1,51 @@
+class Node:
+    def _init_(self, name):
+        self.name = name
+        self.adjacents = []
+
+    def get_name(self):
+        return self.name
+
+    def get_adjacents(self):
+        return [node.get_name() for node in self.adjacents]
+
+    def add_adjacent(self, node):
+        self.adjacents.append(node)
+
+
+class Edge:
+    def _init_(self, name, weight, node1, node2):
+        self.name = name
+        self.weight = weight
+        self.nodes = (node1, node2)
+
+    def get_name(self):
+        return self.name
+
+    def get_weight(self):
+        return self.weight
+
+    def get_connected_nodes(self):
+        return (self.nodes[0].get_name(), self.nodes[1].get_name())
+
+
+class Graph:
+    def _init_(self):
+        self.nodes = {}
+        self.edges = []
+
+    def add_node(self, node):
+        if node.get_name() not in self.nodes:
+            self.nodes[node.get_name()] = node
+
+    def add_edge(self, edge):
+        node1, node2 = edge.get_connected_nodes()
+        if node1 in self.nodes and node2 in self.nodes:
+            self.nodes[node1].add_adjacent(self.nodes[node2])
+            self.nodes[node2].add_adjacent(self.nodes[node1])
+            self.edges.append(edge)
+
+    def print_graph(self):
+        for node_name, node in self.nodes.items():
+            adjacents = ', '.join(node.get_adjacents())
+            print(f"Nó {node_name}: Conectado a -> {adjacents}")
