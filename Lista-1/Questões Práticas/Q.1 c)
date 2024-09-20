@@ -1,0 +1,49 @@
+# Criando nós
+n0 = Node("0")
+n1 = Node("1")
+n2 = Node("2")
+n3 = Node("3")
+n4 = Node("4")
+n5 = Node("5")
+n6 = Node("6")
+
+# Criando grafo
+graph = Graph()
+
+# Adicionando nós ao grafo
+graph.add_node(n0)
+graph.add_node(n1)
+graph.add_node(n2)
+graph.add_node(n3)
+graph.add_node(n4)
+graph.add_node(n5)
+graph.add_node(n6)
+
+# Criando arestas conforme o grafo da imagem
+e1 = Edge("0-1", 2, n0, n1)
+e2 = Edge("0-2", 6, n0, n2)
+e3 = Edge("1-2", 8, n1, n2)
+e4 = Edge("1-3", 5, n1, n3)
+e5 = Edge("2-3", 10, n2, n3)
+e6 = Edge("3-4", 15, n3, n4)
+e7 = Edge("3-5", 6, n3, n5)
+e8 = Edge("4-6", 6, n4, n6)
+e9 = Edge("5-6", 2, n5, n6)
+
+# Adicionando arestas ao grafo
+graph.add_edge(e1)
+graph.add_edge(e2)
+graph.add_edge(e3)
+graph.add_edge(e4)
+graph.add_edge(e5)
+graph.add_edge(e6)
+graph.add_edge(e7)
+graph.add_edge(e8)
+graph.add_edge(e9)
+
+# Imprimindo o grafo
+graph.print_graph()
+
+# Executando Dijkstra para encontrar o menor caminho entre 0 e 6
+caminho, distancia = graph.dijkstra("0", "6")
+print(f"Menor caminho de 0 para 6: {caminho} com distância total: {distancia}")
