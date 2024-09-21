@@ -1,1 +1,82 @@
+import heapq
 
+class Node:
+    def _init_(self, name):
+        self.name = name
+        self.adjacents = []
+
+    def get_name(self):
+        return self.name
+
+    def get_adjacents(self):
+        return [(node.get_name(), weight) for node, weight in self.adjacents]
+
+    def add_adjacent(self, node, weight):
+        self.adjacents.append((node, weight))
+
+
+class Edge:
+    def _init_(self, name, weight, node1, node2):
+        self.name = name
+        self.weight = weight
+        self.nodes = (node1, node2)
+
+    def get_name(self):
+        return self.name
+
+    def get_weight(self):
+        return self.weight
+
+    def get_connected_nodes(self):
+        return (self.nodes[0].get_name(), self.nodes[1].get_name())
+
+
+class Graph:
+    def _init_(self):
+        self.nodes = {}
+        self.edges = []
+
+    def add_node(self, node):
+        if node.get_name() not in self.nodes:
+            self.nodes[node.get_name()] = node
+
+    def add_edge(self, edge):
+        node1, node2 = edge.get_connected_nodes()
+        if node1 in self.nodes and node2 in self.nodes:
+            self.nodes[node1].add_adjacent(self.nodes[node2], edge.get_weight())
+            self.nodes[node2].add_adjacent(self.nodes[node1], edge.get_weight())
+            self.edges.append(edge)
+
+    def print_graph(self):
+        for node_name, node in self.nodes.items():
+            adjacents = ', '.join([f"{n} (peso {w})" for n, w in node.get_adjacents()])
+            print(f"Nó {node_name}: Conectado a -> {adjacents}")
+
+    # Implementação do algoritmo de Dijkstra
+    def dijkstra(self, start, target):
+        distances = {node: float('infinity') for node in self.nodes}
+        distances[start] = 0
+        priority_queue = [(0, start)]
+        previous_nodes = {node: None for node in self.nodes}
+
+        while priority_queue:
+            current_distance, current_node = heapq.heappop(priority_queue)
+
+            if current_distance > distances[current_node]:
+                continue
+
+            for neighbor, weight in self.nodes[current_node].adjacents:
+                distance = current_distance + weight
+
+                if distance < distances[neighbor.get_name()]:
+                    distances[neighbor.get_name()] = distance
+                    previous_nodes[neighbor.get_name()] = current_node
+                    heapq.heappush(priority_queue, (distance, neighbor.get_name()))
+
+        # Reconstruir o caminho do start até o target
+        path = []
+        current_node = target
+        while current_node is not None:
+            path.append(current_node)
+            current_node = previous_nodes[current_node]
+        path = path[::-1]  # Reverter o caminho
