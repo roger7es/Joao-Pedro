@@ -1,1 +1,53 @@
+class Node:
+    def _init_(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
 
+class BST:
+    def _init_(self):
+        self.root = None
+
+    # Método de inserção na árvore
+    def insert(self, value):
+        new_node = Node(value)
+        if self.root is None:
+            self.root = new_node
+        else:
+            self._insert_recursive(self.root, new_node)
+
+    def _insert_recursive(self, current, new_node):
+        if new_node.value < current.value:
+            if current.left is None:
+                current.left = new_node
+            else:
+                self._insert_recursive(current.left, new_node)
+        else:
+            if current.right is None:
+                current.right = new_node
+            else:
+                self._insert_recursive(current.right, new_node)
+
+    # Travessia em pré-ordem
+    def preorder_traversal(self, node, result=[]):
+        if node:
+            result.append(node.value)
+            self.preorder_traversal(node.left, result)
+            self.preorder_traversal(node.right, result)
+        return result
+
+    # Travessia em ordem
+    def inorder_traversal(self, node, result=[]):
+        if node:
+            self.inorder_traversal(node.left, result)
+            result.append(node.value)
+            self.inorder_traversal(node.right, result)
+        return result
+
+    # Travessia em pós-ordem
+    def postorder_traversal(self, node, result=[]):
+        if node:
+            self.postorder_traversal(node.left, result)
+            self.postorder_traversal(node.right, result)
+            result.append(node.value)
+        return result
